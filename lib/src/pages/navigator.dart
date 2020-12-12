@@ -33,8 +33,8 @@ class _NavigatorController extends State<NavigatorController> {
           BottomNavigationBarItem(
             label: "Puntos",
             icon: Container(
-              width: 30,
-              height: 30,
+              width: 25,
+              height: 25,
               child: SvgPicture.asset(
                 currentPage == 0
                     ? "assets/icons/map-icon-selected.svg"
@@ -45,8 +45,8 @@ class _NavigatorController extends State<NavigatorController> {
           BottomNavigationBarItem(
             label: "Más información",
             icon: Container(
-              width: 30,
-              height: 30,
+              width: 25,
+              height: 25,
               child: SvgPicture.asset(
                 currentPage == 1
                     ? "assets/icons/info-icon-selected.svg"
