@@ -12,6 +12,7 @@ class _MapOverview extends State<MapOverview> {
 
   static final CameraPosition _kGooglePlex = CameraPosition(
       target: LatLng(37.42796133580664, -122.085749655962), zoom: 14.5);
+
   @override
   Widget build(BuildContext context) {
     Set<Marker> _markers = {};
@@ -21,14 +22,15 @@ class _MapOverview extends State<MapOverview> {
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
 
-          setState(() {
-            _markers.add(Marker(
-                markerId: MarkerId('marker'),
-                position: LatLng(37.42796133580664, -122.085749655962)));
-          });
+          //Old, revisión más abajo
+          //setState(() {
+          //_markers.add(Marker(
+          //      markerId: MarkerId('marker'),
+          //      position: LatLng(37.42796133580664, -122.085749655962)));
+          //});
         },
         mapType: MapType.normal,
-        markers: _markers,
+        markers: {_marker},
         zoomGesturesEnabled: true,
         myLocationEnabled: true,
         myLocationButtonEnabled: true,
@@ -36,3 +38,9 @@ class _MapOverview extends State<MapOverview> {
     );
   }
 }
+
+Marker _marker = Marker(markerId: MarkerId('marker'),
+    position: LatLng(37.42796133580664, -122.085749655962),
+    infoWindow: InfoWindow(title: 'Hola')
+);
+
