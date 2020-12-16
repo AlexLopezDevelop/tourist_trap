@@ -1,37 +1,95 @@
-import 'dart:async';
+import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MapOverview extends StatefulWidget {
-  _MapOverview createState() => new _MapOverview();
+  MapOverview({Key key}) : super(key: key);
+
+  @override
+  _MapOverview createState() => _MapOverview();
 }
 
 class _MapOverview extends State<MapOverview> {
-  Completer<GoogleMapController> _controller = Completer();
+  Set<Marker> _markers = HashSet<Marker>();
+  bool _showMapStyle = false;
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
-      target: LatLng(37.42796133580664, -122.085749655962), zoom: 14.5);
+  GoogleMapController _mapController;
+  BitmapDescriptor _markerIcon;
+
+  @override
+  void initState() {
+    super.initState();
+    _setMarkerIcon();
+  }
+
+  void _setMarkerIcon() async {
+    _markerIcon = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(), 'assets/noodle_icon.png');
+  }
+
+  void _toggleMapStyle() async {
+    String style = await DefaultAssetBundle.of(context)
+        .loadString('assets/map_style.json');
+
+    if (_showMapStyle) {
+      _mapController.setMapStyle(style);
+    } else {
+      _mapController.setMapStyle(null);
+    }
+  }
+
+  void _onMapCreated(GoogleMapController controller) {
+    _mapController = controller;
+
+    setState(() {
+      _markers.add(
+        Marker(
+            markerId: MarkerId("0"),
+            position: LatLng(37.77483, -122.41942),
+            infoWindow: InfoWindow(
+              title: "San Francsico",
+              snippet: "An Interesting city",
+            ),
+            icon: _markerIcon),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GoogleMap(
-        initialCameraPosition: _kGooglePlex,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
+      body: Stack(
+        children: <Widget>[
+          GoogleMap(
+            onMapCreated: _onMapCreated,
+            initialCameraPosition: CameraPosition(
+              target: LatLng(37.77483, -122.41942),
+              zoom: 12,
+            ),
+            markers: _markers,
+            myLocationEnabled: true,
+            myLocationButtonEnabled: true,
+          ),
+          Container(
+            alignment: Alignment.bottomCenter,
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 80),
+            child: Text("Coding with Curry"),
+          )
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        tooltip: 'Increment',
+        child: Icon(Icons.map),
+        onPressed: () {
+          setState(() {
+            _showMapStyle = !_showMapStyle;
+          });
+
+          _toggleMapStyle();
         },
-        mapType: MapType.normal,
-        markers: {_marker},
-        zoomGesturesEnabled: true,
-        myLocationEnabled: true,
-        myLocationButtonEnabled: true,
       ),
     );
   }
 }
-
-Marker _marker = Marker(
-    markerId: MarkerId('marker'),
-    position: LatLng(37.42796133580664, -122.085749655962),
-    infoWindow: InfoWindow(title: 'Hola'));

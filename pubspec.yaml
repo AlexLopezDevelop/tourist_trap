@@ -31,7 +31,6 @@ dependencies:
 
   flutter_svg: ^0.19.1
   google_maps_flutter: ^0.5.24+1
-  permission_handler: ^5.0.1+1
 
 dev_dependencies:
   flutter_test:
@@ -58,6 +57,7 @@ flutter:
   - assets/icons/info-icon-selected.svg
   - assets/icons/map-icon.svg
   - assets/icons/map-icon-selected.svg
+  - assets/icons/marker-icon.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
