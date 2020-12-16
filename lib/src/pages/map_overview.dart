@@ -70,6 +70,7 @@ class _MapOverview extends State<MapOverview> {
             markers: _markers,
             myLocationEnabled: true,
             myLocationButtonEnabled: true,
+            zoomControlsEnabled: false,
           ),
           Container(
             alignment: Alignment.bottomCenter,
