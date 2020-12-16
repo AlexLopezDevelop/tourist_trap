@@ -41,7 +41,6 @@ class _MapOverview extends State<MapOverview> {
 
   void _onMapCreated(GoogleMapController controller) {
     _mapController = controller;
-
     setState(() {
       _markers.add(
         Marker(
@@ -69,28 +68,27 @@ class _MapOverview extends State<MapOverview> {
             ),
             markers: _markers,
             myLocationEnabled: true,
-            myLocationButtonEnabled: true,
+            myLocationButtonEnabled: false,
             zoomControlsEnabled: false,
           ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            padding: EdgeInsets.fromLTRB(0, 0, 0, 80),
-            child: Text("Coding with Curry"),
-          )
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Increment',
-        child: Icon(Icons.map),
-        onPressed: () {
-          setState(() {
-            _showMapStyle = !_showMapStyle;
-          });
-
-          _toggleMapStyle();
-        },
-      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton:   Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            FloatingActionButton(
+              backgroundColor: Colors.white,
+              onPressed: () {},
+              child: Icon(Icons.layers_outlined, color: Colors.black,),
+            ),
+            Container(width: 10, height: 10,),
+            FloatingActionButton(
+              onPressed: () {},
+              child: Icon(Icons.location_searching),
+            )
+          ],
+        ),
     );
   }
 }
