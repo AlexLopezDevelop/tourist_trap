@@ -71,6 +71,64 @@ class _MapOverview extends State<MapOverview> {
             myLocationButtonEnabled: false,
             zoomControlsEnabled: false,
           ),
+          Positioned(
+            top: 50,
+            right: 15,
+            left: 15,
+            child: Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 15.0, // soften the shadow
+                    spreadRadius: 0.5, //extend the shadow
+                    offset: Offset(
+                      4.0, // Move to right 10  horizontally
+                      4.0, // Move to bottom 10 Vertically
+                    ),
+                  )
+                ],
+                color: Colors.white,
+                  border: Border.all(
+                    color: Colors.white,
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(25),)
+              ),
+              child: Row(
+                children: <Widget>[
+                  IconButton(
+                    splashColor: Colors.grey,
+                    icon: Icon(Icons.search),
+                    onPressed: () {},
+                  ),
+                  Expanded(
+                    child: TextField(
+                      cursorColor: Colors.black,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.go,
+                      decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Busca tu lugar favorito"),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Container(
+            alignment: Alignment.bottomCenter,
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                  side: BorderSide(color: Colors.white)),
+              onPressed: () {},
+              color: Colors.white,
+              textColor: Colors.black,
+              child: Text("Ver lista",
+                  style: TextStyle(fontSize: 14)),
+            ),
+          ),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
