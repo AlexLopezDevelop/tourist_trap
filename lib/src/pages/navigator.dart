@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tourist_trap/src/pages/list_overview.dart';
 import 'package:tourist_trap/src/pages/map_overview.dart';
 
 class NavigatorController extends StatefulWidget {
@@ -13,6 +14,7 @@ class _NavigatorController extends State<NavigatorController> {
   List<Widget> tabs = <Widget>[
     //CameraScreen(widget.cameras),
     MapOverview(),
+    ListOverview(),
     Container(
       color: Colors.red,
     ),

@@ -137,7 +137,13 @@ class _MapOverview extends State<MapOverview> {
           children: <Widget>[
             FloatingActionButton(
               backgroundColor: Colors.white,
-              onPressed: () {},
+              onPressed: () {
+                setState(() {
+                  _showMapStyle = !_showMapStyle;
+                });
+  
+                _toggleMapStyle();
+              },
               child: Icon(Icons.layers_outlined, color: Colors.black,),
             ),
             Container(width: 10, height: 10,),
