@@ -12,10 +12,11 @@ class MapOverview extends StatefulWidget {
 
 class _MapOverview extends State<MapOverview> {
   Set<Marker> _markers = HashSet<Marker>();
-  bool _showMapStyle = false;
+
 
   GoogleMapController _mapController;
   BitmapDescriptor _markerIcon;
+  MapType _viewMapType = MapType.normal;
 
   @override
   void initState() {
@@ -29,14 +30,16 @@ class _MapOverview extends State<MapOverview> {
   }
 
   void _toggleMapStyle() async {
-    String style = await DefaultAssetBundle.of(context)
-        .loadString('assets/map_style.json');
 
-    if (_showMapStyle) {
-      _mapController.setMapStyle(style);
-    } else {
-      _mapController.setMapStyle(null);
-    }
+    setState(() {
+      _viewMapType = _viewMapType == MapType.normal
+          ? MapType.satellite : _viewMapType == MapType.satellite
+          ? MapType.hybrid : _viewMapType == MapType.hybrid ? MapType.terrain :
+          MapType.normal;
+    });
+
+
+
   }
 
   void _onMapCreated(GoogleMapController controller) {
@@ -67,6 +70,7 @@ class _MapOverview extends State<MapOverview> {
               zoom: 12,
             ),
             markers: _markers,
+            mapType: _viewMapType,
             myLocationEnabled: true,
             myLocationButtonEnabled: false,
             zoomControlsEnabled: false,
@@ -138,12 +142,8 @@ class _MapOverview extends State<MapOverview> {
             FloatingActionButton(
               backgroundColor: Colors.white,
               onPressed: () {
-                setState(() {
-                  _showMapStyle = !_showMapStyle;
-                });
-  
-                _toggleMapStyle();
-              },
+                  _toggleMapStyle();
+             },
               child: Icon(Icons.layers_outlined, color: Colors.black,),
             ),
             Container(width: 10, height: 10,),
