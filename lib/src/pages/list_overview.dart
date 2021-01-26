@@ -12,28 +12,70 @@ class _ListOverview extends State<ListOverview> {
   List items = ["1", "2"];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return SafeArea(child:
+    Scaffold(
       body: Column(
         children: <Widget>[
           Container(
+            margin: EdgeInsets.only(top: 30.0, left: 5.0, right: 5.0),
+            decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 15.0, // soften the shadow
+                    spreadRadius: 0.5, //extend the shadow
+                    offset: Offset(
+                      4.0, // Move to right 10  horizontally
+                      4.0, // Move to bottom 10 Vertically
+                    ),
+                  )
+                ],
+                color: Colors.white,
+                border: Border.all(
+                  color: Colors.white,
+                ),
+                borderRadius: BorderRadius.all(Radius.circular(25),)
+            ),
+            child: Row(
+              children: <Widget>[
+                IconButton(
+                  splashColor: Colors.grey,
+                  icon: Icon(Icons.search),
+                  onPressed: () {},
+                ),
+                Expanded(
+                  child: TextField(
+                    cursorColor: Colors.black,
+                    keyboardType: TextInputType.text,
+                    textInputAction: TextInputAction.go,
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "Busca tu lugar favorito"),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Container(
             height: 60.0,
+            margin: EdgeInsets.only(bottom: 20.0),
             child: Expanded(child: Container(
               margin: EdgeInsets.only(top: 25.0),
               child: ListView(scrollDirection: Axis.horizontal, children: <Widget>[
-                  GestureDetector(
-                    onTap: (){
-                      print("Container clicked");
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(left: 5.0, right: 5.0),
-                      padding: EdgeInsets.only(top: 10.0, left: 20.0, bottom: 10.0, right: 20.0),
-                      height: 10.0,
-                      decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.all(Radius.circular(20))
-                  ),
-                  child: Text("Ordenar Alfabeticamente"),
-                ),),
+                GestureDetector(
+                  onTap: (){
+                    print("Container clicked");
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(left: 5.0, right: 5.0),
+                    padding: EdgeInsets.only(top: 10.0, left: 20.0, bottom: 10.0, right: 20.0),
+                    height: 10.0,
+                    decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.all(Radius.circular(20))
+                    ),
+                    child: Text("Ordenar Alfabeticamente"),
+                  ),),
                 GestureDetector(
                   onTap: (){
                     print("Container clicked");
@@ -71,13 +113,14 @@ class _ListOverview extends State<ListOverview> {
               }),)
         ],
       ),
-    );
+    ))
+      ;
   }
 
   Widget getCard() {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 10),
+        padding: const EdgeInsets.only(bottom: 10, top: 10.0),
         child: ListTile(
           title:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
