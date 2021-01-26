@@ -76,9 +76,9 @@ class _MapOverview extends State<MapOverview> {
             zoomControlsEnabled: false,
           ),
           Positioned(
-            top: 50,
-            right: 15,
-            left: 15,
+            top: 49,
+            right: 5,
+            left: 5,
             child: Container(
               decoration: BoxDecoration(
                 boxShadow: [

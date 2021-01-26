@@ -17,7 +17,7 @@ class _ListOverview extends State<ListOverview> {
       body: Column(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(top: 30.0, left: 5.0, right: 5.0),
+            margin: EdgeInsets.only(top: 25.0, left: 5.0, right: 5.0),
             decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
@@ -110,7 +110,21 @@ class _ListOverview extends State<ListOverview> {
               itemCount: items.length,
               itemBuilder: (context, index) {
                 return getCard();
-              }),)
+              }),),
+          Container(
+            alignment: Alignment.bottomCenter,
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+            child: RaisedButton(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                  side: BorderSide(color: Colors.white)),
+              onPressed: () {},
+              color: Colors.white,
+              textColor: Colors.black,
+              child: Text("Ver mapa",
+                  style: TextStyle(fontSize: 14)),
+            ),
+          ),
         ],
       ),
     ))
