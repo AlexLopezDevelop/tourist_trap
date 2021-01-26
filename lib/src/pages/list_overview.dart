@@ -15,19 +15,55 @@ class _ListOverview extends State<ListOverview> {
     return Scaffold(
       body: Column(
         children: <Widget>[
-      Expanded(child: Container(
-        margin: EdgeInsets.symmetric(vertical: 20.0),
-        height: 200.0,
-        child: ListView(scrollDirection: Axis.horizontal, children: <Widget>[
           Container(
-            width: 160.0,
-            color: Colors.red,
+            height: 60.0,
+            child: Expanded(child: Container(
+              margin: EdgeInsets.only(top: 25.0),
+              child: ListView(scrollDirection: Axis.horizontal, children: <Widget>[
+                  GestureDetector(
+                    onTap: (){
+                      print("Container clicked");
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(left: 5.0, right: 5.0),
+                      padding: EdgeInsets.only(top: 10.0, left: 20.0, bottom: 10.0, right: 20.0),
+                      height: 10.0,
+                      decoration: BoxDecoration(
+                      color: Colors.grey[300],
+                      borderRadius: BorderRadius.all(Radius.circular(20))
+                  ),
+                  child: Text("Ordenar Alfabeticamente"),
+                ),),
+                GestureDetector(
+                  onTap: (){
+                    print("Container clicked");
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(left: 5.0, right: 5.0),
+                    padding: EdgeInsets.only(top: 10.0, left: 20.0, bottom: 10.0, right: 20.0),
+                    height: 10.0,
+                    decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.all(Radius.circular(20))
+                    ),
+                    child: Text("Por distancia"),
+                  ),),
+                GestureDetector(
+                  onTap: (){
+                    print("Container clicked");
+                  },
+                  child: Container(
+                    margin: EdgeInsets.only(left: 5.0, right: 5.0),
+                    padding: EdgeInsets.only(top: 10.0, left: 20.0, bottom: 10.0, right: 20.0),
+                    height: 10.0,
+                    decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.all(Radius.circular(20))
+                    ),
+                    child: Text("Por tipo"),
+                  ),),
+              ]),),),
           ),
-          Container(
-            width: 160.0,
-            color: Colors.blue,
-          ),
-        ]),),),
           Expanded(child: ListView.builder(
               itemCount: items.length,
               itemBuilder: (context, index) {
@@ -41,7 +77,7 @@ class _ListOverview extends State<ListOverview> {
   Widget getCard() {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 10),
+        padding: const EdgeInsets.only(bottom: 10),
         child: ListTile(
           title:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
