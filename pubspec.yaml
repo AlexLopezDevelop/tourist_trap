@@ -31,6 +31,7 @@ dependencies:
 
   flutter_svg: ^0.19.1
   google_maps_flutter: ^0.5.24+1
+  flutter_rating_bar: ^3.2.0+1
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +61,10 @@ flutter:
   - assets/icons/marker-icon.svg
   - assets/icons/walking-icon.svg
   - assets/icons/next-icon.svg
+
+  # Images
+  - assets/images/campnou-image.jpg
+  - assets/images/maps-image.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
