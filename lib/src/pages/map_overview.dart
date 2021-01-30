@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tourist_trap/src/components/modal_detail_poi.dart';
 import 'package:flutter_svg/svg.dart';
+import '../api/Api.dart';
+import 'package:http/http.dart' as http;
 
 class MapOverview extends StatefulWidget {
   MapOverview({Key key}) : super(key: key);
@@ -31,7 +33,7 @@ class _MapOverview extends State<MapOverview> {
     if (customIcon == null) {
       ImageConfiguration configuration = createLocalImageConfiguration(context);
       BitmapDescriptor.fromAssetImage(
-              configuration, 'assets/icons/marker-icon.png')
+          configuration, 'assets/icons/marker-icon.png')
           .then((icon) {
         setState(() {
           customIcon = icon;
@@ -53,10 +55,10 @@ class _MapOverview extends State<MapOverview> {
       _viewMapType = _viewMapType == MapType.normal
           ? MapType.satellite
           : _viewMapType == MapType.satellite
-              ? MapType.hybrid
-              : _viewMapType == MapType.hybrid
-                  ? MapType.terrain
-                  : MapType.normal;
+          ? MapType.hybrid
+          : _viewMapType == MapType.hybrid
+          ? MapType.terrain
+          : MapType.normal;
     });
   }
 
@@ -66,256 +68,266 @@ class _MapOverview extends State<MapOverview> {
     return SafeArea(
         child: _is_map_overview
             ? Scaffold(
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.endFloat,
-                floatingActionButton: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    FloatingActionButton(
-                      backgroundColor: Colors.white,
-                      onPressed: () {
-                        _toggleMapStyle();
-                      },
-                      child: Icon(
-                        Icons.layers_outlined,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Container(
-                      width: 10,
-                      height: 10,
-                    ),
-                    FloatingActionButton(
-                      onPressed: () {},
-                      child: Icon(Icons.location_searching),
-                    )
-                  ],
+            floatingActionButtonLocation:
+            FloatingActionButtonLocation.endFloat,
+            floatingActionButton: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                FloatingActionButton(
+                  backgroundColor: Colors.white,
+                  onPressed: () {
+                    _toggleMapStyle();
+                  },
+                  child: Icon(
+                    Icons.layers_outlined,
+                    color: Colors.black,
+                  ),
                 ),
-                body: Stack(
-                  children: <Widget>[
-                    // map_overview
+                Container(
+                  width: 10,
+                  height: 10,
+                ),
+                FloatingActionButton(
+                  onPressed: () {},
+                  child: Icon(Icons.location_searching),
+                )
+              ],
+            ),
+            body: Stack(
+              children: <Widget>[
+                // map_overview
 
-                    GoogleMap(
-                      onMapCreated: (GoogleMapController controller) {},
-                      initialCameraPosition: CameraPosition(
-                        target: LatLng(37.77483, -122.41942),
-                        zoom: 12,
-                      ),
-                      markers: _markers,
-                      mapType: _viewMapType,
-                      myLocationEnabled: true,
-                      mapToolbarEnabled: false,
-                      myLocationButtonEnabled: false,
-                      zoomControlsEnabled: false,
-                    ),
-                    Positioned(
-                      top: 25,
-                      right: 5,
-                      left: 5,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 15.0, // soften the shadow
-                                spreadRadius: 0.5, //extend the shadow
-                                offset: Offset(
-                                  4.0, // Move to right 10  horizontally
-                                  4.0, // Move to bottom 10 Vertically
-                                ),
-                              )
-                            ],
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.white,
+                GoogleMap(
+                  onMapCreated: (GoogleMapController controller) {},
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(37.77483, -122.41942),
+                    zoom: 12,
+                  ),
+                  markers: _markers,
+                  mapType: _viewMapType,
+                  myLocationEnabled: true,
+                  mapToolbarEnabled: false,
+                  myLocationButtonEnabled: false,
+                  zoomControlsEnabled: false,
+                ),
+                Positioned(
+                  top: 25,
+                  right: 5,
+                  left: 5,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 15.0, // soften the shadow
+                            spreadRadius: 0.5, //extend the shadow
+                            offset: Offset(
+                              4.0, // Move to right 10  horizontally
+                              4.0, // Move to bottom 10 Vertically
                             ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(25),
-                            )),
-                        child: Row(
-                          children: <Widget>[
-                            IconButton(
-                              splashColor: Colors.grey,
-                              icon: Icon(Icons.search),
-                              onPressed: () {},
-                            ),
-                            Expanded(
-                              child: TextField(
-                                cursorColor: Colors.black,
-                                keyboardType: TextInputType.text,
-                                textInputAction: TextInputAction.go,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Busca tu lugar favorito"),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.bottomCenter,
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: Colors.white)),
-                        onPressed: () {
-                          setState(() {
-                            _is_map_overview = false;
-                          });
-                        },
-                        color: Colors.white,
-                        textColor: Colors.black,
-                        child:
-                            Text("Ver lista", style: TextStyle(fontSize: 14)),
-                      ),
-                    ),
-                  ],
-                ))
-            : Scaffold(
-                body: Column(
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(top: 25.0, left: 5.0, right: 5.0),
-                      decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black12,
-                              blurRadius: 15.0, // soften the shadow
-                              spreadRadius: 0.5, //extend the shadow
-                              offset: Offset(
-                                4.0, // Move to right 10  horizontally
-                                4.0, // Move to bottom 10 Vertically
-                              ),
-                            )
-                          ],
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Colors.white,
-                          ),
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(25),
-                          )),
-                      child: Row(
-                        children: <Widget>[
-                          IconButton(
-                            splashColor: Colors.grey,
-                            icon: Icon(Icons.search),
-                            onPressed: () {},
-                          ),
-                          Expanded(
-                            child: TextField(
-                              cursorColor: Colors.black,
-                              keyboardType: TextInputType.text,
-                              textInputAction: TextInputAction.go,
-                              decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "Busca tu lugar favorito"),
-                            ),
-                          ),
+                          )
                         ],
-                      ),
-                    ),
-                    Container(
-                      height: 60.0,
-                      margin: EdgeInsets.only(bottom: 20.0),
-                      child: Expanded(
-                        child: Container(
-                          margin: EdgeInsets.only(top: 25.0),
-                          child: ListView(
-                              scrollDirection: Axis.horizontal,
-                              children: <Widget>[
-                                GestureDetector(
-                                  onTap: () {
-                                    print("Container clicked");
-                                  },
-                                  child: Container(
-                                    margin:
-                                        EdgeInsets.only(left: 5.0, right: 5.0),
-                                    padding: EdgeInsets.only(
-                                        top: 10.0,
-                                        left: 20.0,
-                                        bottom: 10.0,
-                                        right: 20.0),
-                                    height: 10.0,
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey[300],
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20))),
-                                    child: Text("Ordenar Alfabeticamente"),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    print("Container clicked");
-                                  },
-                                  child: Container(
-                                    margin:
-                                        EdgeInsets.only(left: 5.0, right: 5.0),
-                                    padding: EdgeInsets.only(
-                                        top: 10.0,
-                                        left: 20.0,
-                                        bottom: 10.0,
-                                        right: 20.0),
-                                    height: 10.0,
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey[300],
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20))),
-                                    child: Text("Por distancia"),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    print("Container clicked");
-                                  },
-                                  child: Container(
-                                    margin:
-                                        EdgeInsets.only(left: 5.0, right: 5.0),
-                                    padding: EdgeInsets.only(
-                                        top: 10.0,
-                                        left: 20.0,
-                                        bottom: 10.0,
-                                        right: 20.0),
-                                    height: 10.0,
-                                    decoration: BoxDecoration(
-                                        color: Colors.grey[300],
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20))),
-                                    child: Text("Por tipo"),
-                                  ),
-                                ),
-                              ]),
+                        color: Colors.white,
+                        border: Border.all(
+                          color: Colors.white,
                         ),
-                      ),
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(25),
+                        )),
+                    child: Row(
+                      children: <Widget>[
+                        IconButton(
+                          splashColor: Colors.grey,
+                          icon: Icon(Icons.search),
+                          onPressed: () {},
+                        ),
+                        Expanded(
+                          child: TextField(
+                            cursorColor: Colors.black,
+                            keyboardType: TextInputType.text,
+                            textInputAction: TextInputAction.go,
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText: "Busca tu lugar favorito"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.bottomCenter,
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  child: RaisedButton(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                        side: BorderSide(color: Colors.white)),
+                    onPressed: () {
+                      setState(() {
+                        _is_map_overview = false;
+                      });
+                    },
+                    color: Colors.white,
+                    textColor: Colors.black,
+                    child:
+                    Text("Ver lista", style: TextStyle(fontSize: 14)),
+                  ),
+                ),
+              ],
+            ))
+            : Scaffold(
+          body: Column(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(top: 25.0, left: 5.0, right: 5.0),
+                decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 15.0, // soften the shadow
+                        spreadRadius: 0.5, //extend the shadow
+                        offset: Offset(
+                          4.0, // Move to right 10  horizontally
+                          4.0, // Move to bottom 10 Vertically
+                        ),
+                      )
+                    ],
+                    color: Colors.white,
+                    border: Border.all(
+                      color: Colors.white,
+                    ),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(25),
+                    )),
+                child: Row(
+                  children: <Widget>[
+                    IconButton(
+                      splashColor: Colors.grey,
+                      icon: Icon(Icons.search),
+                      onPressed: () {},
                     ),
                     Expanded(
-                      child: ListView.builder(
+                      child: TextField(
+                        cursorColor: Colors.black,
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.go,
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Busca tu lugar favorito"),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                height: 60.0,
+                margin: EdgeInsets.only(bottom: 20.0),
+                child: Expanded(
+                  child: Container(
+                    margin: EdgeInsets.only(top: 25.0),
+                    child: ListView(
+                        scrollDirection: Axis.horizontal,
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: () {
+                              print("Container clicked");
+                            },
+                            child: Container(
+                              margin:
+                              EdgeInsets.only(left: 5.0, right: 5.0),
+                              padding: EdgeInsets.only(
+                                  top: 10.0,
+                                  left: 20.0,
+                                  bottom: 10.0,
+                                  right: 20.0),
+                              height: 10.0,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(20))),
+                              child: Text("Ordenar Alfabeticamente"),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              print("Container clicked");
+                            },
+                            child: Container(
+                              margin:
+                              EdgeInsets.only(left: 5.0, right: 5.0),
+                              padding: EdgeInsets.only(
+                                  top: 10.0,
+                                  left: 20.0,
+                                  bottom: 10.0,
+                                  right: 20.0),
+                              height: 10.0,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(20))),
+                              child: Text("Por distancia"),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              print("Container clicked");
+                            },
+                            child: Container(
+                              margin:
+                              EdgeInsets.only(left: 5.0, right: 5.0),
+                              padding: EdgeInsets.only(
+                                  top: 10.0,
+                                  left: 20.0,
+                                  bottom: 10.0,
+                                  right: 20.0),
+                              height: 10.0,
+                              decoration: BoxDecoration(
+                                  color: Colors.grey[300],
+                                  borderRadius: BorderRadius.all(
+                                      Radius.circular(20))),
+                              child: Text("Por tipo"),
+                            ),
+                          ),
+                        ]),
+                  ),
+                ),
+              ),
+              Expanded(
+                  child: FutureBuilder(future: Api().fetchPois(), builder: (_, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: Text("Loading..."),
+                      );
+                    } else {
+                      print(snapshot);
+                      return ListView.builder(
                           itemCount: items.length,
                           itemBuilder: (context, index) {
                             return getCard();
-                          }),
-                    ),
-                    Container(
-                      alignment: Alignment.bottomCenter,
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: Colors.white)),
-                        onPressed: () {
-                          setState(() {
-                            _is_map_overview = true;
                           });
-                        },
-                        color: Colors.white, textColor: Colors.black,
-                        child: Text("Ver mapa", style: TextStyle(fontSize: 14)),
-                      ),
-                    ),
-                  ],
+                    }
+                  },)
+              ),
+              Container(
+                alignment: Alignment.bottomCenter,
+                padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                child: RaisedButton(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18.0),
+                      side: BorderSide(color: Colors.white)),
+                  onPressed: () {
+                    setState(() {
+                      _is_map_overview = true;
+                    });
+                  },
+                  color: Colors.white,
+                  textColor: Colors.black,
+                  child: Text("Ver mapa", style: TextStyle(fontSize: 14)),
                 ),
-              ));
+              ),
+            ],
+          ),
+        ));
   }
 
   _showModalBottom() {
@@ -332,7 +344,7 @@ class _MapOverview extends State<MapOverview> {
         padding: const EdgeInsets.only(bottom: 10, top: 10.0),
         child: ListTile(
           title:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Row(
               children: <Widget>[
                 Container(
@@ -355,7 +367,7 @@ class _MapOverview extends State<MapOverview> {
                     Text(
                       "Punto de interes",
                       style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                      TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                     ),
                     Text(
                       "Calle torrent del Olla 218",
