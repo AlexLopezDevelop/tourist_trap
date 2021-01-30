@@ -58,7 +58,7 @@ flutter:
   - assets/icons/info-icon-selected.svg
   - assets/icons/map-icon.svg
   - assets/icons/map-icon-selected.svg
-  - assets/icons/marker-icon.svg
+  - assets/icons/marker-icon.png
   - assets/icons/walking-icon.svg
   - assets/icons/next-icon.svg
 

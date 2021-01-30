@@ -12,9 +12,7 @@ class _ListOverview extends State<ListOverview> {
   List items = ["1", "2"];
   @override
   Widget build(BuildContext context) {
-    return SafeArea(child:
-    Scaffold(
-      body: Column(
+    return Column(
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(top: 25.0, left: 5.0, right: 5.0),
@@ -126,9 +124,7 @@ class _ListOverview extends State<ListOverview> {
             ),
           ),
         ],
-      ),
-    ))
-      ;
+      );
   }
 
   Widget getCard() {
