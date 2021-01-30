@@ -1,26 +1,42 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:tourist_trap/src/tools/Tool.dart';
+import '../models/Pois.dart';
 
 class ModalMapDetail extends StatelessWidget {
+
+  final Pois poi;
+
+  ModalMapDetail({Key key, @required this.poi}) : super(key: key);
+
   Widget build(BuildContext context) {
+    var distanceFromPoi = Geolocator.distanceBetween( 37.77483, -122.41942, double.parse(poi.poi.latitud), double.parse(poi.poi.longitud));
+
     return Container(
         child: Column(
           children: <Widget>[
             Row(
               children: <Widget>[
-                Expanded(child: Container(width: 150, height: 150, decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: AssetImage(
-                        'assets/images/maps-image.jpg'),
+                Expanded(child: Container(width: 150, height: 150, child: GoogleMap(
+                  onMapCreated: (GoogleMapController controller) {},
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(double.parse(poi.poi.latitud), double.parse(poi.poi.longitud)),
+                    zoom: 15,
                   ),
+                  mapType: MapType.normal,
+                  myLocationEnabled: true,
+                  mapToolbarEnabled: false,
+                  myLocationButtonEnabled: false,
+                  zoomControlsEnabled: false,
                 ),)),
                 Expanded(child: Container(width: 150, height: 150, decoration: BoxDecoration(
                   image: DecorationImage(
                     fit: BoxFit.cover,
-                    image: AssetImage(
-                        'assets/images/campnou-image.jpg'),
+                    image: NetworkImage(poi.poi.image),
                   ),
                 ),)),
               ],
@@ -32,14 +48,22 @@ class ModalMapDetail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "Punto de interes",
+                        poi.poi.nombreEs,
                         style:
                         TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                       ),
-                      Text(
-                        "Calle torrent del Olla 218",
-                        style: TextStyle(color: Colors.grey, fontSize: 13),
-                      )
+                      Container(
+                        margin: EdgeInsets.only(top: 5.0),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: 220.0,
+                          ),
+                          child: AutoSizeText(
+                            poi.poi.direccion,
+                            style: TextStyle(color: Colors.grey, fontSize: 13),
+                          ),
+                        ),)
+
                     ],
                   )
                 ],
@@ -57,7 +81,7 @@ class ModalMapDetail extends StatelessWidget {
                       right: 15,
                     ),
                     child: Text(
-                      "150m",
+                      Tool().distanceCalculator(distanceFromPoi),
                       style: TextStyle(fontSize: 12, color: Color(0xff3c5cdc)),
                     ),
                   ),

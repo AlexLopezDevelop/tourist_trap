@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tourist_trap/src/components/modal_detail_poi.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:tourist_trap/src/models/Pois.dart';
+import 'package:tourist_trap/src/tools/Tool.dart';
 import '../api/Api.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -21,14 +22,14 @@ class _MapOverview extends State<MapOverview> {
   MapType _viewMapType = MapType.normal;
   BitmapDescriptor customIcon;
   Set<Marker> markers;
-  bool _is_map_overview;
+  bool is_map_overview;
   List items = ["1", "2"];
 
   @override
   void initState() {
     super.initState();
     markers = Set.from([]);
-    _is_map_overview = true;
+    is_map_overview = true;
   }
 
   createMarker(context) {
@@ -45,7 +46,7 @@ class _MapOverview extends State<MapOverview> {
                 position: LatLng(37.77483, -122.41942),
                 icon: BitmapDescriptor.defaultMarkerWithHue(
                     BitmapDescriptor.hueAzure),
-                onTap: () => _showModalBottom()),
+                /*onTap: () => _showModalBottom()*/),
           );
         });
       });
@@ -68,7 +69,7 @@ class _MapOverview extends State<MapOverview> {
   Widget build(BuildContext context) {
     createMarker(context);
     return SafeArea(
-        child: _is_map_overview
+        child: is_map_overview
             ? Scaffold(
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.endFloat,
@@ -166,7 +167,7 @@ class _MapOverview extends State<MapOverview> {
                             side: BorderSide(color: Colors.white)),
                         onPressed: () {
                           setState(() {
-                            _is_map_overview = false;
+                            is_map_overview = false;
                           });
                         },
                         color: Colors.white,
@@ -322,7 +323,7 @@ class _MapOverview extends State<MapOverview> {
                             side: BorderSide(color: Colors.white)),
                         onPressed: () {
                           setState(() {
-                            _is_map_overview = true;
+                            is_map_overview = true;
                           });
                         },
                         color: Colors.white,
@@ -335,101 +336,95 @@ class _MapOverview extends State<MapOverview> {
               ));
   }
 
-  _showModalBottom() {
+  _showModalBottom(Pois poi) {
     showModalBottomSheet(
         context: context,
         builder: (context) {
-          return ModalMapDetail();
+          return ModalMapDetail(poi: poi,);
         });
   }
 
   Widget getCard(Pois poi) {
     var distanceFromPoi = Geolocator.distanceBetween( 37.77483, -122.41942, double.parse(poi.poi.latitud), double.parse(poi.poi.longitud));
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 10, top: 10.0),
-        child: ListTile(
-          title:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Row(
-              children: <Widget>[
-                Container(
-                  width: 45,
-                  height: 45,
-                  decoration: BoxDecoration(
-                      color: Colors.red,
-                      borderRadius: BorderRadius.circular(60 / 2),
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: NetworkImage(poi.poi.image))),
-                ),
-                SizedBox(
-                  width: 20,
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    FittedBox(
-                      fit: BoxFit.fill,
-                      child: Text(
-                        poi.poi.nombreEs,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(top: 5.0),
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          maxWidth: 160.0,
-                        ),
-                        child: AutoSizeText(
-                          poi.poi.direccion,
-                          style: TextStyle(color: Colors.grey, fontSize: 13),
+    return GestureDetector(
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 10, top: 10.0),
+          child: ListTile(
+            title:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: 45,
+                    height: 45,
+                    decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(60 / 2),
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(poi.poi.image))),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      FittedBox(
+                        fit: BoxFit.fill,
+                        child: Text(
+                          poi.poi.nombreEs,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.bold),
                         ),
                       ),
+                      Container(
+                        margin: EdgeInsets.only(top: 5.0),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            maxWidth: 160.0,
+                          ),
+                          child: AutoSizeText(
+                            poi.poi.direccion,
+                            style: TextStyle(color: Colors.grey, fontSize: 13),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Container(
+                    width: 20,
+                    height: 20,
+                    child: SvgPicture.asset("assets/icons/walking-icon.svg"),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 5,
+                      right: 15,
                     ),
-                  ],
-                )
-              ],
-            ),
-            Row(
-              children: <Widget>[
-                Container(
-                  width: 20,
-                  height: 20,
-                  child: SvgPicture.asset("assets/icons/walking-icon.svg"),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    left: 5,
-                    right: 15,
+                    child: Text(
+                      Tool().distanceCalculator(distanceFromPoi),
+                      style: TextStyle(fontSize: 12, color: Color(0xff3c5cdc)),
+                    ),
                   ),
-                  child: Text(
-                    distanceCalculator(distanceFromPoi),
-                    style: TextStyle(fontSize: 12, color: Color(0xff3c5cdc)),
+                  Container(
+                    width: 10,
+                    height: 10,
+                    child: SvgPicture.asset("assets/icons/next-icon.svg"),
                   ),
-                ),
-                Container(
-                  width: 10,
-                  height: 10,
-                  child: SvgPicture.asset("assets/icons/next-icon.svg"),
-                ),
-              ],
-            )
-          ]),
+                ],
+              )
+            ]),
+          ),
         ),
       ),
+      onTap: () => _showModalBottom(poi),
     );
-  }
-
-  String distanceCalculator(double distance) {
-    if (distance.toString().length > 3) {
-      distance = double.parse(distance.toString())/1000;
-      return distance.roundToDouble().toString() + " km";
-    }
-
-    return distance.roundToDouble().toString() + " m";
   }
 }
