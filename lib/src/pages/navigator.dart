@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tourist_trap/src/pages/info.dart';
 import 'package:tourist_trap/src/pages/map_overview.dart';
 
 class NavigatorController extends StatefulWidget {
@@ -12,9 +13,7 @@ class _NavigatorController extends State<NavigatorController> {
   int currentPage = 0;
   List<Widget> tabs = <Widget>[
     MapOverview(),
-    Container(
-      color: Colors.red,
-    ),
+    Info()
   ];
   @override
   Widget build(BuildContext context) {
