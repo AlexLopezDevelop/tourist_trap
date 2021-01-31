@@ -23,7 +23,9 @@ class _MapOverview extends State<MapOverview> {
   BitmapDescriptor customIcon;
   Set<Marker> markers;
   bool is_map_overview;
-  List items = ["1", "2"];
+  TextEditingController controller = new TextEditingController();
+  List<Pois> _searchResult = [];
+  List<Pois> pois;
 
   @override
   void initState() {
@@ -67,6 +69,21 @@ class _MapOverview extends State<MapOverview> {
     });
   }
 
+  onSearchTextChanged(String text) async {
+    _searchResult.clear();
+    if (text.isEmpty) {
+      setState(() {});
+      return;
+    }
+
+    pois.forEach((poi) {
+      if (poi.poi.nombreEn.contains(text))
+        _searchResult.add(poi);
+    });
+
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -78,7 +95,7 @@ class _MapOverview extends State<MapOverview> {
             child: Text("Loading..."),
           ),));
         } else {
-          List<Pois> pois = snapshot.data;
+          pois = snapshot.data;
 
           for (int i = 0; i < pois.length; i++) {
             createMarker(pois, i);
@@ -166,9 +183,11 @@ class _MapOverview extends State<MapOverview> {
                                   cursorColor: Colors.black,
                                   keyboardType: TextInputType.text,
                                   textInputAction: TextInputAction.go,
+                                  controller: controller,
                                   decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: "Busca tu lugar favorito"),
+                                    onChanged: onSearchTextChanged,
                                 ),
                               ),
                             ],
@@ -231,9 +250,11 @@ class _MapOverview extends State<MapOverview> {
                               cursorColor: Colors.black,
                               keyboardType: TextInputType.text,
                               textInputAction: TextInputAction.go,
+                              controller: controller,
                               decoration: InputDecoration(
                                   border: InputBorder.none,
                                   hintText: "Busca tu lugar favorito"),
+                              onChanged: onSearchTextChanged,
                             ),
                           ),
                         ],
@@ -313,7 +334,13 @@ class _MapOverview extends State<MapOverview> {
                       ),
                     ),
                     Expanded(
-                        child: ListView.builder(
+                        child: _searchResult.length != 0 || controller.text.isNotEmpty ?
+                          ListView.builder(
+                              itemCount: _searchResult.length,
+                              itemBuilder: (context, index){
+                                return getCard(_searchResult[index]);
+                              })
+                        : ListView.builder(
                             itemCount: pois.length,
                             itemBuilder: (context, index) {
                               return getCard(pois[index]);
