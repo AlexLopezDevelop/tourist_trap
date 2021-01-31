@@ -32,7 +32,7 @@ class _MapOverview extends State<MapOverview> {
     is_map_overview = true;
   }
 
-  createMarker(context) {
+  createMarker(List<Pois> poi, int index) {
     if (customIcon == null) {
       ImageConfiguration configuration = createLocalImageConfiguration(context);
       BitmapDescriptor.fromAssetImage(
@@ -42,11 +42,13 @@ class _MapOverview extends State<MapOverview> {
           customIcon = icon;
           _markers.add(
             Marker(
-                markerId: MarkerId("0"),
-                position: LatLng(37.77483, -122.41942),
+                markerId: MarkerId(index.toString()),
+                position: LatLng(double.parse(poi[index].poi.latitud), double.parse(poi[index].poi.longitud)),
                 icon: BitmapDescriptor.defaultMarkerWithHue(
                     BitmapDescriptor.hueAzure),
-                /*onTap: () => _showModalBottom()*/),
+                onTap: () {
+                  _showModalBottom(poi[index]);
+                }),
           );
         });
       });
@@ -67,118 +69,133 @@ class _MapOverview extends State<MapOverview> {
 
   @override
   Widget build(BuildContext context) {
-    createMarker(context);
-    return SafeArea(
-        child: is_map_overview
-            ? Scaffold(
-                floatingActionButtonLocation:
-                    FloatingActionButtonLocation.endFloat,
-                floatingActionButton: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    FloatingActionButton(
-                      backgroundColor: Colors.white,
-                      onPressed: () {
-                        _toggleMapStyle();
-                      },
-                      child: Icon(
-                        Icons.layers_outlined,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Container(
-                      width: 10,
-                      height: 10,
-                    ),
-                    FloatingActionButton(
-                      onPressed: () {},
-                      child: Icon(Icons.location_searching),
-                    )
-                  ],
-                ),
-                body: Stack(
-                  children: <Widget>[
-                    // map_overview
+    return FutureBuilder(
+      future: Api().fetchPois(),
+      builder: (_, snapshot) {
+        if (snapshot.connectionState ==
+            ConnectionState.waiting) {
+          return SafeArea(child: Scaffold(body: Center(
+            child: Text("Loading..."),
+          ),));
+        } else {
+          List<Pois> pois = snapshot.data;
 
-                    GoogleMap(
-                      onMapCreated: (GoogleMapController controller) {},
-                      initialCameraPosition: CameraPosition(
-                        target: LatLng(37.77483, -122.41942),
-                        zoom: 12,
-                      ),
-                      markers: _markers,
-                      mapType: _viewMapType,
-                      myLocationEnabled: true,
-                      mapToolbarEnabled: false,
-                      myLocationButtonEnabled: false,
-                      zoomControlsEnabled: false,
-                    ),
-                    Positioned(
-                      top: 25,
-                      right: 5,
-                      left: 5,
-                      child: Container(
-                        decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 15.0, // soften the shadow
-                                spreadRadius: 0.5, //extend the shadow
-                                offset: Offset(
-                                  4.0, // Move to right 10  horizontally
-                                  4.0, // Move to bottom 10 Vertically
-                                ),
-                              )
-                            ],
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.white,
-                            ),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(25),
-                            )),
-                        child: Row(
-                          children: <Widget>[
-                            IconButton(
-                              splashColor: Colors.grey,
-                              icon: Icon(Icons.search),
-                              onPressed: () {},
-                            ),
-                            Expanded(
-                              child: TextField(
-                                cursorColor: Colors.black,
-                                keyboardType: TextInputType.text,
-                                textInputAction: TextInputAction.go,
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Busca tu lugar favorito"),
-                              ),
-                            ),
-                          ],
+          for (int i = 0; i < pois.length; i++) {
+            createMarker(pois, i);
+          }
+
+          return SafeArea(
+              child: is_map_overview
+                  ? Scaffold(
+                  floatingActionButtonLocation:
+                  FloatingActionButtonLocation.endFloat,
+                  floatingActionButton: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      FloatingActionButton(
+                        backgroundColor: Colors.white,
+                        onPressed: () {
+                          _toggleMapStyle();
+                        },
+                        child: Icon(
+                          Icons.layers_outlined,
+                          color: Colors.black,
                         ),
                       ),
-                    ),
-                    Container(
-                      alignment: Alignment.bottomCenter,
-                      padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: Colors.white)),
-                        onPressed: () {
-                          setState(() {
-                            is_map_overview = false;
-                          });
-                        },
-                        color: Colors.white,
-                        textColor: Colors.black,
-                        child:
-                            Text("Ver lista", style: TextStyle(fontSize: 14)),
+                      Container(
+                        width: 10,
+                        height: 10,
                       ),
-                    ),
-                  ],
-                ))
-            : Scaffold(
+                      FloatingActionButton(
+                        onPressed: () {},
+                        child: Icon(Icons.location_searching),
+                      )
+                    ],
+                  ),
+                  body: Stack(
+                    children: <Widget>[
+                      // map_overview
+
+                      GoogleMap(
+                        onMapCreated: (GoogleMapController controller) {},
+                        initialCameraPosition: CameraPosition(
+                          // TODO: Change hardcoded coordinates by user coordinates
+                          target: LatLng(41.403706, 2.173504),
+                          zoom: 12,
+                        ),
+                        markers: _markers,
+                        mapType: _viewMapType,
+                        myLocationEnabled: true,
+                        mapToolbarEnabled: false,
+                        myLocationButtonEnabled: false,
+                        zoomControlsEnabled: false,
+                      ),
+                      Positioned(
+                        top: 25,
+                        right: 5,
+                        left: 5,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black12,
+                                  blurRadius: 15.0, // soften the shadow
+                                  spreadRadius: 0.5, //extend the shadow
+                                  offset: Offset(
+                                    4.0, // Move to right 10  horizontally
+                                    4.0, // Move to bottom 10 Vertically
+                                  ),
+                                )
+                              ],
+                              color: Colors.white,
+                              border: Border.all(
+                                color: Colors.white,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(25),
+                              )),
+                          child: Row(
+                            children: <Widget>[
+                              IconButton(
+                                splashColor: Colors.grey,
+                                icon: Icon(Icons.search),
+                                onPressed: () {},
+                              ),
+                              Expanded(
+                                child: TextField(
+                                  cursorColor: Colors.black,
+                                  keyboardType: TextInputType.text,
+                                  textInputAction: TextInputAction.go,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: "Busca tu lugar favorito"),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.bottomCenter,
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                        child: RaisedButton(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                              side: BorderSide(color: Colors.white)),
+                          onPressed: () {
+                            setState(() {
+                              is_map_overview = false;
+                            });
+                          },
+                          color: Colors.white,
+                          textColor: Colors.black,
+                          child:
+                          Text("Ver lista", style: TextStyle(fontSize: 14)),
+                        ),
+                      ),
+                    ],
+                  ))
+                  : Scaffold(
                 body: Column(
                   children: <Widget>[
                     Container(
@@ -237,7 +254,7 @@ class _MapOverview extends State<MapOverview> {
                                   },
                                   child: Container(
                                     margin:
-                                        EdgeInsets.only(left: 5.0, right: 5.0),
+                                    EdgeInsets.only(left: 5.0, right: 5.0),
                                     padding: EdgeInsets.only(
                                         top: 10.0,
                                         left: 20.0,
@@ -257,7 +274,7 @@ class _MapOverview extends State<MapOverview> {
                                   },
                                   child: Container(
                                     margin:
-                                        EdgeInsets.only(left: 5.0, right: 5.0),
+                                    EdgeInsets.only(left: 5.0, right: 5.0),
                                     padding: EdgeInsets.only(
                                         top: 10.0,
                                         left: 20.0,
@@ -277,7 +294,7 @@ class _MapOverview extends State<MapOverview> {
                                   },
                                   child: Container(
                                     margin:
-                                        EdgeInsets.only(left: 5.0, right: 5.0),
+                                    EdgeInsets.only(left: 5.0, right: 5.0),
                                     padding: EdgeInsets.only(
                                         top: 10.0,
                                         left: 20.0,
@@ -296,24 +313,11 @@ class _MapOverview extends State<MapOverview> {
                       ),
                     ),
                     Expanded(
-                        child: FutureBuilder(
-                      future: Api().fetchPois(),
-                      builder: (_, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(
-                            child: Text("Loading..."),
-                          );
-                        } else {
-                          List<Pois> pois = snapshot.data;
-                          return ListView.builder(
-                              itemCount: pois.length,
-                              itemBuilder: (context, index) {
-                                return getCard(pois[index]);
-                              });
-                        }
-                      },
-                    )),
+                        child: ListView.builder(
+                            itemCount: pois.length,
+                            itemBuilder: (context, index) {
+                              return getCard(pois[index]);
+                            }),),
                     Container(
                       alignment: Alignment.bottomCenter,
                       padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
@@ -334,6 +338,9 @@ class _MapOverview extends State<MapOverview> {
                   ],
                 ),
               ));
+        }
+      },
+    );
   }
 
   _showModalBottom(Pois poi) {
@@ -345,6 +352,7 @@ class _MapOverview extends State<MapOverview> {
   }
 
   Widget getCard(Pois poi) {
+    // TODO: Change hardcoded coordinates by user coordinates
     var distanceFromPoi = Geolocator.distanceBetween( 37.77483, -122.41942, double.parse(poi.poi.latitud), double.parse(poi.poi.longitud));
 
     return GestureDetector(

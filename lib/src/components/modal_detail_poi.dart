@@ -14,6 +14,7 @@ class ModalMapDetail extends StatelessWidget {
   ModalMapDetail({Key key, @required this.poi}) : super(key: key);
 
   Widget build(BuildContext context) {
+    // TODO: Change hardcoded coordinates by user coordinates
     var distanceFromPoi = Geolocator.distanceBetween( 37.77483, -122.41942, double.parse(poi.poi.latitud), double.parse(poi.poi.longitud));
 
     return Container(
