@@ -10,11 +10,13 @@ class NavigatorController extends StatefulWidget {
 }
 
 class _NavigatorController extends State<NavigatorController> {
+
   int currentPage = 0;
   List<Widget> tabs = <Widget>[
     MapOverview(),
     Info()
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

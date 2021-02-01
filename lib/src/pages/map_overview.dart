@@ -26,12 +26,27 @@ class _MapOverview extends State<MapOverview> {
   TextEditingController controller = new TextEditingController();
   List<Pois> _searchResult = [];
   List<Pois> pois;
+  LatLng _center ;
+  double userLatitude;
+  double userLongitude;
 
   @override
   void initState() {
     super.initState();
     markers = Set.from([]);
     is_map_overview = true;
+  }
+
+
+  getUserLocation() async {
+    var position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    var lastPosition = await Geolocator.getLastKnownPosition();
+    print(lastPosition);
+    print("pene duro");
+    setState(() {
+      userLatitude = position.latitude;
+      userLongitude = position.longitude;
+    });
   }
 
   createMarker(List<Pois> poi, int index) {
@@ -137,7 +152,7 @@ class _MapOverview extends State<MapOverview> {
                         height: 10,
                       ),
                       FloatingActionButton(
-                        onPressed: () {},
+                          onPressed: () {getUserLocation();},
                         child: Icon(Icons.location_searching),
                       )
                     ],
@@ -150,7 +165,7 @@ class _MapOverview extends State<MapOverview> {
                         onMapCreated: (GoogleMapController controller) {},
                         initialCameraPosition: CameraPosition(
                           // TODO: Change hardcoded coordinates by user coordinates
-                          target: LatLng(41.403706, 2.173504),
+                          target: _center != null ? _center : LatLng(41.403706, 2.173504),
                           zoom: 12,
                         ),
                         markers: _markers,
