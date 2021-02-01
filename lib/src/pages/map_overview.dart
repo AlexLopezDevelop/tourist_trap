@@ -35,13 +35,13 @@ class _MapOverview extends State<MapOverview> {
   }
 
   createMarker(List<Pois> poi, int index) {
-    if (customIcon == null) {
+    /*if (customIcon == null) {
       ImageConfiguration configuration = createLocalImageConfiguration(context);
       BitmapDescriptor.fromAssetImage(
               configuration, 'assets/icons/marker-icon.png')
           .then((icon) {
         setState(() {
-          customIcon = icon;
+          customIcon = icon;*/
           _markers.add(
             Marker(
                 markerId: MarkerId(index.toString()),
@@ -52,9 +52,9 @@ class _MapOverview extends State<MapOverview> {
                   _showModalBottom(poi[index]);
                 }),
           );
-        });
+        /*});
       });
-    }
+    }*/
   }
 
   void _toggleMapStyle() async {
@@ -77,7 +77,7 @@ class _MapOverview extends State<MapOverview> {
     }
 
     pois.forEach((poi) {
-      if (poi.poi.nombreEn.contains(text))
+      if (poi.poi.nombreEn.toLowerCase().contains(text.toLowerCase()))
         _searchResult.add(poi);
     });
 
@@ -97,9 +97,22 @@ class _MapOverview extends State<MapOverview> {
         } else {
           pois = snapshot.data;
 
-          for (int i = 0; i < pois.length; i++) {
-            createMarker(pois, i);
+          _markers.clear();
+
+          if (_searchResult.length != 0 || controller.text.isNotEmpty) {
+            for (int i = 0; i < _searchResult.length; i++) {
+              createMarker(_searchResult, i);
+            }
+
+          } else {
+
+            for (int i = 0; i < pois.length; i++) {
+              createMarker(pois, i);
+            }
           }
+
+
+
 
           return SafeArea(
               child: is_map_overview
