@@ -153,7 +153,7 @@ class _MapOverview extends State<PoiOverview> {
                                     backgroundColor: Colors.white,
                                     onPressed: () {
                                       _toggleMapStyle();
-                                      Tool().showModalBottomTypes(types, context);
+                                      Tool().showModalBottomTypes(types, pois, context);
                                     },
                                     child: Icon(
                                       Icons.layers_outlined,

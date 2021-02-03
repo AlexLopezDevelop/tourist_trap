@@ -25,11 +25,11 @@ class Tool {
         });
   }
 
-  showModalBottomTypes(TypesData types, context) {
+  showModalBottomTypes(TypesData types, List<Pois> pois, context) {
     showModalBottomSheet(
         context: context,
         builder: (context) {
-          return ModalTypes(types: types );
+          return ModalTypes(types: types, pois: pois);
         });
   }
 

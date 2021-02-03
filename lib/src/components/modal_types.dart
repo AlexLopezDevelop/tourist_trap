@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:tourist_trap/src/models/Pois.dart';
 import 'package:tourist_trap/src/models/TypeData.dart';
 
 class ModalTypes extends StatelessWidget {
   final TypesData types;
+  final List<Pois> pois;
 
-  ModalTypes({Key key, @required this.types}) : super(key: key);
+  ModalTypes({Key key, @required this.types, this.pois}) : super(key: key);
 
   Widget build(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: <
@@ -32,7 +34,7 @@ class ModalTypes extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             // ignore: unrelated_type_equality_checks
-                            //types.typeData.where((i) => i.pOIType.id == index).toList();
+                            //pois.where((i) => i.type == types.typeData[index].pOIType.id).toList();
                           },
                           child: Container(
                             margin: EdgeInsets.only(bottom: 10),
