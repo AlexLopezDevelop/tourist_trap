@@ -410,13 +410,13 @@ class _MapOverview extends State<PoiOverview> {
                                             itemCount: _searchResult.length,
                                             itemBuilder: (context, index) {
                                               return LocationListCard(
-                                                  _searchResult[index]);
+                                              poi: _searchResult[index],);
                                             })
                                         : ListView.builder(
                                             itemCount: pois.length,
                                             itemBuilder: (context, index) {
                                               return LocationListCard(
-                                                  pois[index]);
+                                                  poi: pois[index]);
                                             }),
                                   ),
                                   Container(

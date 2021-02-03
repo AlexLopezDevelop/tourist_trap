@@ -30,7 +30,10 @@ class ModalTypes extends StatelessWidget {
                     child: Column(
                       children: <Widget>[
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            // ignore: unrelated_type_equality_checks
+                            //types.typeData.where((i) => i.pOIType.id == index).toList();
+                          },
                           child: Container(
                             margin: EdgeInsets.only(bottom: 10),
                             width: 50.0,

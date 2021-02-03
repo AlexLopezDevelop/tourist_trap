@@ -8,8 +8,7 @@ import '../models/Pois.dart';
 class LocationListCard extends StatelessWidget {
   final Pois poi;
 
-  LocationListCard(Pois searchResult, {Key key, @required this.poi})
-      : super(key: key);
+  LocationListCard({Key key, @required this.poi}) : super(key: key);
 
   Widget build(BuildContext context) {
     var distanceFromPoi = Geolocator.distanceBetween(37.77483, -122.41942,
