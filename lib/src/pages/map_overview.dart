@@ -42,7 +42,6 @@ class _MapOverview extends State<MapOverview> {
     var position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
     var lastPosition = await Geolocator.getLastKnownPosition();
     print(lastPosition);
-    print("pene duro");
     setState(() {
       userLatitude = position.latitude;
       userLongitude = position.longitude;
@@ -299,7 +298,7 @@ class _MapOverview extends State<MapOverview> {
                               children: <Widget>[
                                 GestureDetector(
                                   onTap: () {
-                                    print("Container clicked");
+                                    pois.sort((a, b) => a.poi.nombreEn.compareTo(b.poi.nombreEn));
                                   },
                                   child: Container(
                                     margin:
@@ -320,6 +319,7 @@ class _MapOverview extends State<MapOverview> {
                                 GestureDetector(
                                   onTap: () {
                                     print("Container clicked");
+                                    pois.sort((a, b) => a.poi.latitud.compareTo(b.poi.latitud));
                                   },
                                   child: Container(
                                     margin:
@@ -339,7 +339,7 @@ class _MapOverview extends State<MapOverview> {
                                 ),
                                 GestureDetector(
                                   onTap: () {
-                                    print("Container clicked");
+                                    pois.sort((a, b) => a.type.id.compareTo(b.type.id));
                                   },
                                   child: Container(
                                     margin:
