@@ -1,3 +1,18 @@
+class TypesData {
+  List<TypeData> typeData;
+
+  TypesData({this.typeData});
+
+  TypesData.fromJson(List<dynamic> json) {
+    if (json != null) {
+      typeData = new List<TypeData>();
+      json.forEach((v) {
+        typeData.add(new TypeData.fromJson(v));
+      });
+    }
+  }
+}
+
 class TypeData {
   POIType pOIType;
 

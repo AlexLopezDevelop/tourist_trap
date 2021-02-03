@@ -1,5 +1,9 @@
-import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:tourist_trap/src/components/modal_detail_poi.dart';
+import 'package:tourist_trap/src/components/modal_types.dart';
+import 'package:tourist_trap/src/models/Pois.dart';
+import 'package:tourist_trap/src/models/TypeData.dart';
 
 class Tool {
   String distanceCalculator(double distance) {
@@ -9,6 +13,24 @@ class Tool {
     }
 
     return distance.roundToDouble().toString() + " m";
+  }
+
+  showModalBottomMapDetail(Pois poi, context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return ModalMapDetail(
+            poi: poi,
+          );
+        });
+  }
+
+  showModalBottomTypes(TypesData types, context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return ModalTypes(types: types );
+        });
   }
 
   Future<Position> getUserLocation() async {
